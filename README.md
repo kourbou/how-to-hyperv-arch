@@ -20,7 +20,7 @@ To set up an Internal Switch with Internet Connection Sharing, go through the fo
 - Open the Sharing tab in the adapter's properties panel, check the "Allow other network users to connect through this
   computer's Internet connection" box. Select the Internal Switch as the "Home networking connection."
 
-<img src="images/network-adapters-sharing.png" alt="Network Adapters Sharing" width="400" />
+<img src="images/network-adapters-sharing.png" alt="Network Adapters Sharing" width="350" />
 
 ## 2. Creating the virtual vachine in Hyper-V Manager
 
@@ -180,7 +180,7 @@ Use `pacstrap` to install the `base` package, along with the Linux kernel, the D
 - Set the hostname and add entries to the hosts file.
   
 <pre><code># nano /etc/hostname
-<b>HVARCH1</b>
+<b>hv-arch1</b>
 # nano /etc/hosts
 <b>127.0.0.1	localhost
 ::1		localhost</b></code></pre>
