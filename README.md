@@ -22,7 +22,7 @@ To set up an Internal Switch with Internet Connection Sharing, go through the fo
 
 <img src="images/network-adapters-sharing.png" alt="Network Adapters Sharing" width="300" />
 
-## 2. Creating the Virtual Machine in Hyper-V Manager
+## 2. Creating the virtual vachine in Hyper-V Manager
 
 Open the Hyper-V Manager (`virtmgmt.msc`), and select New > Virtual Machine... to open the New Virtual Machine Wizard.
 Go through the wizard as you normally would but take note of the following settings:
@@ -47,12 +47,28 @@ uncheck "Enable Secure Boot"
 
 <img src="images/vm-settings-secure-boot.png" alt="Virtual Machine Security Settings" width="600" />
 
-## 4. Disable Hyper-V Alt + Tab keyboard shortcut capture (Optional)
+## 4. Setting up SSH on the installation image
 
-By default, Hyper-V will capture keyboard shortcuts like Alt + Tab when the Virtual Machine Connection window is
-focused. You can configure this behavior in the Hyper-V settings.
+It is easier to interact with the installation image via SSH. To do so, go through the following steps:
 
-<img src="images/hyperv-settings-keyboard.png" alt="Hyper-V Keyboard Settings" width="600" />
+- After having started the virtual machine, set your keyboard layout using `loadkeys`.
 
-## 5. Install Arch Linux on the Virtual Machine
+    $ loadkeys fr
 
+- Note down the DHCP-assigned IP address of the virtual machine.
+
+    $ ip addr
+
+<img src="images/arch-install-ip-address.png" alt="IP address of the installation image" width="600" />
+
+- Set the password of the root user so that you can connect to it via SSH.
+
+    $ passwd
+
+- Then start the SSH server.
+
+    $ systemctl start sshd.service
+
+Now you can connect to the installation image using the `root` account.
+
+## 5. Install Arch Linux on the virtual machine
