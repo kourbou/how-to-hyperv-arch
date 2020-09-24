@@ -52,13 +52,11 @@ uncheck "Enable Secure Boot"
 It is easier to interact with the installation image via SSH. To do so, go through the following steps:
 
 - After having started the virtual machine, set your keyboard layout using `loadkeys`.
-
 ```
 # loadkeys fr
 ```
 
 - Note down the DHCP-assigned IP address of the virtual machine.
-
 ```
 # ip addr
 ```
@@ -66,7 +64,6 @@ It is easier to interact with the installation image via SSH. To do so, go throu
 <img src="images/arch-install-ip-address.png" alt="IP address of the installation image" width="800" />
 
 - Set the password of the root user so that you can connect to it via SSH.
-
 ```
 # passwd
 ```
@@ -186,9 +183,43 @@ Use `pacstrap` to install the `base` package, along with the Linux kernel, the D
 <b>HVARCH1</b>
 # nano /etc/hosts
 <b>127.0.0.1	localhost
-::1			localhost</b></code></pre>
+::1		localhost</b></code></pre>
 
 - Set the root password:
 ```
 # passwd
 ```
+
+## 6. Setting up the EFISTUB bootloader
+
+The Linux kernel supports booting off of EFI directly without the need for a bootloader when it is configured with
+`CONFIG_EFI_STUB` support. The kernel parameters are stored in the EFI parameters in the BIOS and passed on to the EFI
+stub in the kernel on startup.
+
+- Exit out of the `chroot` using `exit` or Ctrl + D.
+
+- First find the partition UUID of the root partition by using `blkid`:
+```
+# blkid /dev/sda2
+```
+- Use `efibootmgr` to create an EFI entry for the Linux kernel, and use the PARTUUID from the root partition.
+<pre><code># efibootmgr --disk /dev/sda --part 1 --create --label "Linux Kernel" --loader /vmlinuz-linux --verbose \
+    --unicode 'root=PARTUUID=<b>XXXXXXXX-XX</b> rw initrd=\initramfs-linux.img' 
+</code></pre>
+
+- Poweroff the installation image cleanly:
+```
+# poweroff
+```
+
+- In the virtual machine settings, remove the installation image from the SCSI Controller.
+
+Arch Linux is now installed on the virtual machine. You should be able to see the `vmlinuz-linux` kernel file in the
+Firmware tab.
+
+<img src="images/vm-settings-firmware-postinstall.png" alt="Virtual Machine Firmware Settings" width="600" />
+
+## 7. Assigning a static IP address and adding it to Windows HOSTS
+
+- 
+
