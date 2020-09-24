@@ -54,13 +54,13 @@ It is easier to interact with the installation image via SSH. To do so, go throu
 - After having started the virtual machine, set your keyboard layout using `loadkeys`.
 
 ```
-$ loadkeys fr
+# loadkeys fr
 ```
 
 - Note down the DHCP-assigned IP address of the virtual machine.
 
 ```
-$ ip addr
+# ip addr
 ```
 
 <img src="images/arch-install-ip-address.png" alt="IP address of the installation image" width="800" />
@@ -68,13 +68,13 @@ $ ip addr
 - Set the password of the root user so that you can connect to it via SSH.
 
 ```
-$ passwd
+# passwd
 ```
 
 - Then start the SSH server.
 
 ```
-$ systemctl start sshd.service
+# systemctl start sshd.service
 ```
 
 Now you can connect to the installation image using the `root` account.
@@ -82,14 +82,14 @@ Now you can connect to the installation image using the `root` account.
 ## 5. Install Arch Linux on the virtual machine
 
 The next steps in order to install are well detailed in the wiki's [installation
-guide](https://wiki.archlinux.org/index.php/Installation_guide). You can follow those instructions but here are some
-steps that are more relevent.
+guide](https://wiki.archlinux.org/index.php/Installation_guide). You should  follow those instructions but here are some
+steps that are specific to our virtual machine:
 
 ### Partitioning the disks
 
 Since we are using UEFI, you must create an EFI system partition for the BIOS to find the bootloader in. 
 
-<pre><code># <b>fdisk /dev/sda</b>
+<pre><code># fdisk /dev/sda
 
 Welcome to fdisk (util-linux 2.36).
 Changes will remain in memory only, until you decide to write them.
@@ -129,3 +129,66 @@ The partition table has been altered.
 Calling ioctl() to re-read partition table.
 Syncing disks.</code></pre>
 
+### Format the partitions and mount them
+
+In this case we are using FAT for the EFI System Partition and ext4 for the root partition.
+
+```
+# mkfs.fat /dev/sda1
+# mkfs.ext4 /dev/sda2
+```
+The EFI System Partition is generally mounted at `/boot` on the root partition. 
+
+```
+# mount /dev/sda2 /mnt
+# mkdir /mnt/boot
+# mount /dev/sda1 /mnt/boot
+```
+
+### Installing the system and essential packages
+
+Use `pacstrap` to install the `base` package, along with the Linux kernel, the DHCP client and `nano`.
+
+```
+# pacstrap /mnt base linux dhcpcd nano
+```
+
+### Configure the system
+
+- Generate an `fstab` file:
+```
+# genfstab -U /mnt >> /mnt/etc/fstab
+```
+
+- Change root into the new system:
+```
+# arch-chroot /mnt
+```
+
+- Set the timezone:
+```
+# ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
+```
+
+- Edit `/etc/locale.gen` and uncomment `en_US.UTF-8 UTF-8`, then run `locale-gen`:
+```
+# nano /etc/locale.gen
+# locale-gen
+```
+
+- Set the framebuffer keyboard layout:
+<pre><code># nano /etc/vconsole.conf
+<b>KEYMAP=fr</b></code></pre>
+
+- Set the hostname and add entries to the hosts file.
+  
+<pre><code># nano /etc/hostname
+<b>HVARCH1</b>
+# nano /etc/hosts
+<b>127.0.0.1	localhost
+::1			localhost</b></code></pre>
+
+- Set the root password:
+```
+# passwd
+```
