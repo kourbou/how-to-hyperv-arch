@@ -144,10 +144,10 @@ The EFI System Partition is generally mounted at `/boot` on the root partition.
 
 ### Installing the system and essential packages
 
-Use `pacstrap` to install the `base` package, along with the Linux kernel, the DHCP client and `nano`.
+Use `pacstrap` to install the `base` package, along with the Linux kernel, the DHCP client, SSH and `nano`.
 
 ```
-# pacstrap /mnt base linux dhcpcd nano
+# pacstrap /mnt base linux dhcpcd openssh nano
 ```
 
 ### Configure the system
@@ -190,6 +190,11 @@ Use `pacstrap` to install the `base` package, along with the Linux kernel, the D
 # passwd
 ```
 
+- Enable the DHCP client service:
+```
+# systemctl enable dhcpcd
+```
+
 ## 6. Setting up the EFISTUB bootloader
 
 The Linux kernel supports booting off of EFI directly without the need for a bootloader when it is configured with
@@ -220,6 +225,3 @@ Firmware tab.
 <img src="images/vm-settings-firmware-postinstall.png" alt="Virtual Machine Firmware Settings" width="600" />
 
 ## 7. Assigning a static IP address and adding it to Windows HOSTS
-
-- 
-
