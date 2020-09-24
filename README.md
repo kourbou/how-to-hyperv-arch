@@ -147,7 +147,7 @@ The EFI System Partition is generally mounted at `/boot` on the root partition.
 Use `pacstrap` to install the `base` package, along with the Linux kernel, the DHCP client, SSH and `nano`.
 
 ```
-# pacstrap /mnt base linux dhcpcd openssh nano
+# pacstrap /mnt base linux linux-firmware dhcpcd openssh nano
 ```
 
 ### Configure the system
