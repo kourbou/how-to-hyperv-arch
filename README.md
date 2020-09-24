@@ -185,15 +185,17 @@ Use `pacstrap` to install the `base` package, along with the Linux kernel, the D
 <b>127.0.0.1	localhost
 ::1		localhost</b></code></pre>
 
-- Set the root password:
-```
-# passwd
-```
-
-- Enable the DHCP client service:
+- Enable the DHCP client service along with the SSH server:
 ```
 # systemctl enable dhcpcd
+# systemctl enable ssh
 ```
+
+- Allow passwordless and root logins on SSH by adding the following to the config:
+<pre><code># nano /etc/ssh/sshd_config
+...
+<b>PermitEmptyPasswords yes
+PermitRootLogin yes</b></code></pre>
 
 ## 6. Setting up the EFISTUB bootloader
 
