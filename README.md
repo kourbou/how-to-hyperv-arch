@@ -10,17 +10,17 @@ To set up an Internal Switch with Internet Connection Sharing, go through the fo
 
 - Inside the Hyper-V Manager (`virtmgmt.msc`), open the Virtual Switch Manager. Create and name your Internal Switch.
 
-![Virtual Switch Manager](images/virtual-switch-manager.png)
+<img src="images/virtual-switch-manager.png" alt="Virtual Switch Manager" width="600" />
 
 - Open the Network Connections Control Panel (`ncpa.cpl`). Select a network adapter that has internet access, that you
   would like to connect the Internal Switch to.
 
-![Network Adapters Control Panel](images/network-adapters-control-panel.png)
+<img src="images/network-adapters-control-panel.png" alt="Network Adapters Control Panel" width="900" />
 
 - Open the Sharing tab in the adapter's properties panel, check the "Allow other network users to connect through this
   computer's Internet connection" box. Select the Internal Switch as the "Home networking connection."
 
-![Network Adapters Sharing](images/network-adapters-sharing.png)
+<img src="images/network-adapters-sharing.png" alt="Network Adapters Sharing" width="300" />
 
 ## 2. Creating the Virtual Machine in Hyper-V Manager
 
@@ -29,15 +29,15 @@ Go through the wizard as you normally would but take note of the following setti
 
 - When specifying the Hyper-V Generation, use Generation 2 to create a UEFI virtual machine.
 
-![New Virtual Machine Wizard Generation](images/vm-wizard-generation.png)
+<img src="images/vm-wizard-generation.png" alt="New Virtual Machine Wizard Generation" width="600" />
 
 - Select the Internal Switch you created when configuring networking.
 
-![New Virtual Machine Wizard Networking](images/vm-wizard-networking.png)
+<img src="images/vm-wizard-networking.png" alt="New Virtual Machine Wizard Networking" width="600" />
 
 - Select "Install an operating system from a bootable image file" and set it to your Arch Linux installation image.
 
-![New Virtual Machine Wizard Installation](images/vm-wizard-installation.png)
+<img src="images/vm-wizard-installation.png" alt="New Virtual Machine Wizard Installation" width="600" />
 
 ## 3. Disable Secure Boot in the VM settings
 
@@ -45,14 +45,14 @@ Secure Boot requires that the bootloader be signed with Microsoft's key. In orde
 installation image you need to disable Secure Boot. In your virtual machine's settings go to the Security tab and
 uncheck "Enable Secure Boot"
 
-![Virtual Machine Security Settings](images/vm-settings-secure-boot.png)
+<img src="images/vm-settings-secure-boot.png" alt="Virtual Machine Security Settings" width="600" />
 
 ## 4. Disable Hyper-V Alt + Tab keyboard shortcut capture (Optional)
 
 By default, Hyper-V will capture keyboard shortcuts like Alt + Tab when the Virtual Machine Connection window is
 focused. You can configure this behavior in the Hyper-V settings.
 
-![Hyper-V Keyboard Settings](images/hyperv-settings-keyboard.png)
+<img src="images/hyperv-settings-keyboard.png" alt="Hyper-V Keyboard Settings" width="600" />
 
 ## 5. Install Arch Linux on the Virtual Machine
 
