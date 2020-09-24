@@ -1,4 +1,4 @@
-# Installing an Arch Linux virtual machine on Windows Hyper-V
+# Installing an Arch Linux virtual machine on Hyper-V
 
 ## 1. Creating the Internal Network Switch
 
@@ -53,21 +53,29 @@ It is easier to interact with the installation image via SSH. To do so, go throu
 
 - After having started the virtual machine, set your keyboard layout using `loadkeys`.
 
-    $ loadkeys fr
+```
+$ loadkeys fr
+```
 
 - Note down the DHCP-assigned IP address of the virtual machine.
 
-    $ ip addr
+```
+$ ip addr
+```
 
-<img src="images/arch-install-ip-address.png" alt="IP address of the installation image" width="600" />
+<img src="images/arch-install-ip-address.png" alt="IP address of the installation image" width="800" />
 
 - Set the password of the root user so that you can connect to it via SSH.
 
-    $ passwd
+```
+$ passwd
+```
 
 - Then start the SSH server.
 
-    $ systemctl start sshd.service
+```
+$ systemctl start sshd.service
+```
 
 Now you can connect to the installation image using the `root` account.
 
