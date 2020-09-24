@@ -20,7 +20,7 @@ To set up an Internal Switch with Internet Connection Sharing, go through the fo
 - Open the Sharing tab in the adapter's properties panel, check the "Allow other network users to connect through this
   computer's Internet connection" box. Select the Internal Switch as the "Home networking connection."
 
-<img src="images/network-adapters-sharing.png" alt="Network Adapters Sharing" width="300" />
+<img src="images/network-adapters-sharing.png" alt="Network Adapters Sharing" width="400" />
 
 ## 2. Creating the virtual vachine in Hyper-V Manager
 
@@ -80,3 +80,52 @@ $ systemctl start sshd.service
 Now you can connect to the installation image using the `root` account.
 
 ## 5. Install Arch Linux on the virtual machine
+
+The next steps in order to install are well detailed in the wiki's [installation
+guide](https://wiki.archlinux.org/index.php/Installation_guide). You can follow those instructions but here are some
+steps that are more relevent.
+
+### Partitioning the disks
+
+Since we are using UEFI, you must create an EFI system partition for the BIOS to find the bootloader in. 
+
+<pre><code># <b>fdisk /dev/sda</b>
+
+Welcome to fdisk (util-linux 2.36).
+Changes will remain in memory only, until you decide to write them.
+Be careful before using the write command.
+
+Device does not contain a recognized partition table.
+Created a new DOS disklabel with disk identifier 0x93c960bd.
+
+Command (m for help): <b>n</b>
+Partition type
+   p   primary (0 primary, 0 extended, 4 free)
+   e   extended (container for logical partitions)
+Select (default p): <b>&crarr;</b>
+
+Using default response p.
+Partition number (1-4, default 1): <b>&crarr;</b>
+First sector (2048-266338303, default 2048): <b>&crarr;</b>
+Last sector, +/-sectors or +/-size{K,M,G,T,P} (2048-266338303, default 266338303): <b>+512M</b>
+
+Created a new partition 1 of type 'Linux' and of size 512 MiB.
+
+Command (m for help): <b>n</b>
+Partition type
+   p   primary (1 primary, 0 extended, 3 free)
+   e   extended (container for logical partitions)
+Select (default p): <b>&crarr;</b>
+
+Using default response p.
+Partition number (2-4, default 2): <b>&crarr;</b>
+First sector (1050624-266338303, default 1050624): <b>&crarr;</b>
+Last sector, +/-sectors or +/-size{K,M,G,T,P} (1050624-266338303, default 266338303): <b>&crarr;</b>
+
+Created a new partition 2 of type 'Linux' and of size 126.5 GiB.
+
+Command (m for help): <b>w</b>
+The partition table has been altered.
+Calling ioctl() to re-read partition table.
+Syncing disks.</code></pre>
+
