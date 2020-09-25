@@ -187,8 +187,13 @@ Use `pacstrap` to install the `base` package, along with the Linux kernel, the D
 
 - Enable the DHCP client service along with the SSH server:
 ```
-# systemctl enable dhcpcd
-# systemctl enable ssh
+# systemctl enable dhcpcd.service
+# systemctl enable sshd.service
+```
+
+- Remove default password on the root account to make it passwordless:
+```
+# passwd -d
 ```
 
 - Allow passwordless and root logins on SSH by adding the following to the config:
