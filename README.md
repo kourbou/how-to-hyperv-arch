@@ -193,7 +193,7 @@ Use `pacstrap` to install the `base` package, along with the Linux kernel, the D
 
 - Remove default password on the root account to make it passwordless:
 ```
-# passwd -d
+# passwd -d root
 ```
 
 - Allow passwordless and root logins on SSH by adding the following to the config:
@@ -232,3 +232,21 @@ Firmware tab.
 <img src="images/vm-settings-firmware-postinstall.png" alt="Virtual Machine Firmware Settings" width="600" />
 
 ## 7. Assigning a static IP address and adding it to Windows HOSTS
+
+The virtual machine's IP address is assigned by DHCP. In order to add the virtual machine to the HOSTS file on the
+Windows side, you need to request an IP when doing the DHCP handshake. To do this edit `/etc/dhcpcd.conf`. In this case
+we are requesting `192.168.137.10`.
+
+<pre><code># nano /etc/dhcpcd.conf
+...
+<b>request 192.168.137.10</b></code></pre>
+
+You now add the entry to the HOSTS file and reboot the VM:
+
+<pre><code><i>C:\Windows\System32\drivers\etc\hosts</i>
+...
+<b>192.168.137.10	hv-arch1</b></code></pre>
+
+You now can SSH into the machine using `ssh root@hv-arch1`.
+
+## 8. 
