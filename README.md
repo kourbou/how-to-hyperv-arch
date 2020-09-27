@@ -202,6 +202,9 @@ Use `pacstrap` to install the `base` package, along with the Linux kernel, the D
 <b>PermitEmptyPasswords yes
 PermitRootLogin yes</b></code></pre>
 
+Note: No ports of the virtual machine should be exposed outside of the host, so setting root as passwordless is not very
+problematic since it can only be accessed straight from the host.
+
 ## 6. Setting up the EFISTUB bootloader
 
 The Linux kernel supports booting off of EFI directly without the need for a bootloader when it is configured with
@@ -249,4 +252,50 @@ You now add the entry to the HOSTS file and reboot the VM:
 
 You now can SSH into the machine using `ssh root@hv-arch1`.
 
-## 8. 
+## 8. Adding a passwordless user account
+
+Use the following commands to create a passwordless account with sudo privileges:
+
+<pre><code># pacman -Syu sudo
+...
+# useradd -m <i>username</i>
+# usermod -aG wheel <i>username</i>
+# passwd -d <i>username</i></code></pre>
+
+Also uncomment the line from the `/etc/sudoers` file to enable the `wheel` group privileges:
+<pre><code># EDITOR=nano visudo
+...
+<b>%wheel ALL=(ALL) ALL</b></code></pre>
+
+## 9. Setting up `pacman` mirror list refresh on startup
+
+It is a good idea to occasionally to refresh the mirror list. There is a service packaged with `reflector` that does
+this on system startup. Under normal circumstances you will not restart the virtual machine often since Hyper-V suspends
+its state when you shut down Windows.
+
+```
+$ sudo pacman -S reflector
+$ sudo systemctl enable reflector.service
+```
+
+You can configure the parameters in `/etc/xdg/reflector/reflector.conf`.
+
+## 10. Setting up `zsh` as a replacement for `bash`
+
+Zsh is a good alternative shell to the default Bash shell. The Arch Linux installation images uses a Zsh configuration
+that you can install straight from `pacman` called [grml zsh](https://grml.org/zsh/).
+
+<pre><code>$ sudo pacman -S zsh grml-zsh-config
+$ sudo chsh -s /bin/zsh <i>username</i>
+$ touch ~/.zshrc</code></pre>
+
+_Note: You do not usually require root privileges to change your own shell but by default
+[PAM](https://en.wikipedia.org/wiki/Pluggable_authentication_module) is not configured to allow passwordless accounts to
+change shell._
+
+## 11. Setting up X-forwarded `urxvt` terminal on Windows
+https://sourceforge.net/projects/xming/
+http://www.straightrunning.com/XmingNotes/
+
+## 12. Setting up a terminal multiplexer (`tmux`)
+https://wiki.archlinux.org/index.php/General_recommendations#Session_management
