@@ -173,6 +173,10 @@ Use `pacstrap` to install the `base` package, along with the Linux kernel, the D
 # locale-gen
 ```
 
+- Create the `/etc/locale.conf` file and set the `LANG` variable.
+<pre><code># nano /etc/locale.conf
+<b>LANG=en_US.UTF-8</b></code></pre>
+
 - Set the framebuffer keyboard layout:
 <pre><code># nano /etc/vconsole.conf
 <b>KEYMAP=fr</b></code></pre>
@@ -293,9 +297,43 @@ _Note: You do not usually require root privileges to change your own shell but b
 [PAM](https://en.wikipedia.org/wiki/Pluggable_authentication_module) is not configured to allow passwordless accounts to
 change shell._
 
-## 11. Setting up X-forwarded `urxvt` terminal on Windows
-https://sourceforge.net/projects/xming/
-http://www.straightrunning.com/XmingNotes/
+## 11. Setting up `tmux` (terminal multiplexer)
 
-## 12. Setting up a terminal multiplexer (`tmux`)
-https://wiki.archlinux.org/index.php/General_recommendations#Session_management
+### `.zshrc`
+```
+# Start tmux when connecting through SSH
+
+if [[ $- == *i* ]] && [[ -z "$TMUX" ]] && [[ -n "$SSH_CONNECTION" ]]; then
+        tmux new-session -A -s ssh_tmux ; exit
+fi
+```
+### `.tmux.conf`
+```
+# Remap prefix from 'C-b' to 'C-a'. Less awkward prefix shortcut.
+unbind C-b
+set-option -g prefix C-a
+bind-key C-a last-window
+
+# Windows with shift + arrow keys
+bind -n M-Left previous-window
+bind -n M-Right next-window
+
+# Window splitting with underscore and backslash
+bind \\ split-window -h
+bind _ split-window -v
+
+# Non-prefix pane switching with Alt + Arrow Keys
+bind -n M-Left select-pane -L
+bind -n M-Right select-pane -R
+bind -n M-Up select-pane -U
+bind -n M-Down select-pane -D
+
+# Change status bar colors
+set -g status-bg colour235
+set -g status-fg white
+```
+
+## To-do
+- [ ] Add some details to the tmux setup
+- [ ] Add instructions on enabling Hyper-V and OpenSSH as Windows features.
+- [ ] Add some information about using cmd.exe with the new underscore cursor
