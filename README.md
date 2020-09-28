@@ -302,7 +302,6 @@ change shell._
 ### `.zshrc`
 ```
 # Start tmux when connecting through SSH
-
 if [[ $- == *i* ]] && [[ -z "$TMUX" ]] && [[ -n "$SSH_CONNECTION" ]]; then
         tmux new-session -A -s ssh_tmux ; exit
 fi
