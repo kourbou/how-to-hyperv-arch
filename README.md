@@ -167,13 +167,13 @@ Use `pacstrap` to install the `base` package, along with the Linux kernel, the D
 # ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
 ```
 
-- Edit `/etc/locale.gen` and uncomment `en_US.UTF-8 UTF-8`, then run `locale-gen`:
+- Edit `/etc/locale.gen` and uncomment `en_US.UTF-8 UTF-8`, then run `locale-gen`.
 ```
 # nano /etc/locale.gen
 # locale-gen
 ```
 
-- Create the `/etc/locale.conf` file and set the `LANG` variable.
+- Create `/etc/locale.conf` and set the `LANG` variable:
 <pre><code># nano /etc/locale.conf
 <b>LANG=en_US.UTF-8</b></code></pre>
 
@@ -189,7 +189,7 @@ Use `pacstrap` to install the `base` package, along with the Linux kernel, the D
 <b>127.0.0.1	localhost
 ::1		localhost</b></code></pre>
 
-- Enable the DHCP client service along with the SSH server:
+- Enable the DHCP client service along with the SSH server.
 ```
 # systemctl enable dhcpcd.service
 # systemctl enable sshd.service
@@ -331,9 +331,13 @@ bind -n M-Down select-pane -D
 # Change status bar colors
 set -g status-bg colour235
 set -g status-fg white
+
+# Detach tmux with 'C-s'
+bind -n C-s detach
 ```
 
 ## To-do
 - [ ] Add some details to the tmux setup
 - [ ] Add instructions on enabling Hyper-V and OpenSSH as Windows features.
 - [ ] Add some information about using cmd.exe with the new underscore cursor
+- [ ] Using Samba to connect the virtual machine as a network drive in Windows Explorer.
