@@ -1,6 +1,19 @@
 # Installing an Arch Linux virtual machine on Hyper-V
 
-## 1. Creating the Internal Network Switch
+## 1. Enabling Windows Hyper-V and OpenSSH Client features
+
+To enable Hyper-V, got through the following steps:
+- Open "Programs and Features" in the Control Panel (`appwiz.cpl`). 
+- Select "Turn Windows features on or off" in the sidebar and check "Hyper-V" in the dropdown, then press OK.
+
+To enable the built-in SSH client in Windows 10, use these steps:
+- Open the Windows 10 settings app, and select the "Apps" panel. Under the "Apps & features" tab, press "Optional 
+features."
+- Click on "Add a feature", then check "OpenSSH Client" and press "Install."
+
+In order to finish activating the features you must reboot Windows.
+
+## 2. Creating the Internal Network Switch
 
 If you need the VM to directly connect to your network, use an External Switch instead. An Internal Switch will create a
 subnet inside the host computer that VMs can connect to. You can give these VMs access to the internet by using Windows
@@ -22,7 +35,12 @@ To set up an Internal Switch with Internet Connection Sharing, go through the fo
 
 <img src="images/network-adapters-sharing.png" alt="Network Adapters Sharing" width="350" />
 
-## 2. Creating the virtual vachine in Hyper-V Manager
+<i>Note: If you have issues with Windows Internect Connection Sharing not working after a reboot or ICS service restart,
+check this [help
+page](https://support.microsoft.com/en-us/help/4055559/ics-doesn-t-work-after-computer-or-service-restart-on-windows-10)
+from Microsoft.</i>
+
+## 3. Creating the virtual vachine in Hyper-V Manager
 
 Open the Hyper-V Manager (`virtmgmt.msc`), and select New > Virtual Machine... to open the New Virtual Machine Wizard.
 Go through the wizard as you normally would but take note of the following settings:
@@ -39,7 +57,7 @@ Go through the wizard as you normally would but take note of the following setti
 
 <img src="images/vm-wizard-installation.png" alt="New Virtual Machine Wizard Installation" width="600" />
 
-## 3. Disable Secure Boot in the VM settings
+## 4. Disable Secure Boot in the VM settings
 
 Secure Boot requires that the bootloader be signed with Microsoft's key. In order to boot into the Arch Linux
 installation image you need to disable Secure Boot. In your virtual machine's settings go to the Security tab and
@@ -47,7 +65,7 @@ uncheck "Enable Secure Boot"
 
 <img src="images/vm-settings-secure-boot.png" alt="Virtual Machine Security Settings" width="600" />
 
-## 4. Setting up SSH on the installation image
+## 5. Setting up SSH on the installation image
 
 It is easier to interact with the installation image via SSH. To do so, go through the following steps:
 
@@ -76,7 +94,7 @@ It is easier to interact with the installation image via SSH. To do so, go throu
 
 Now you can connect to the installation image using the `root` account.
 
-## 5. Install Arch Linux on the virtual machine
+## 6. Install Arch Linux on the virtual machine
 
 The next steps in order to install are well detailed in the wiki's [installation
 guide](https://wiki.archlinux.org/index.php/Installation_guide). You should  follow those instructions but here are some
@@ -209,7 +227,7 @@ PermitRootLogin yes</b></code></pre>
 Note: No ports of the virtual machine should be exposed outside of the host, so setting root as passwordless is not very
 problematic since it can only be accessed straight from the host.
 
-## 6. Setting up the EFISTUB bootloader
+## 7. Setting up the EFISTUB bootloader
 
 The Linux kernel supports booting off of EFI directly without the need for a bootloader when it is configured with
 `CONFIG_EFI_STUB` support. The kernel parameters are stored in the EFI parameters in the BIOS and passed on to the EFI
@@ -238,7 +256,7 @@ Firmware tab.
 
 <img src="images/vm-settings-firmware-postinstall.png" alt="Virtual Machine Firmware Settings" width="600" />
 
-## 7. Assigning a static IP address and adding it to Windows HOSTS
+## 8. Assigning a static IP address and adding it to Windows HOSTS
 
 The virtual machine's IP address is assigned by DHCP. In order to add the virtual machine to the HOSTS file on the
 Windows side, you need to request an IP when doing the DHCP handshake. To do this edit `/etc/dhcpcd.conf`. In this case
@@ -254,9 +272,11 @@ You now add the entry to the HOSTS file and reboot the VM:
 ...
 <b>192.168.137.10	hv-arch1</b></code></pre>
 
-You now can SSH into the machine using `ssh root@hv-arch1`.
+You now can SSH into the machine using `ssh root@hv-arch1`. Note that you can use a Desktop shortcut with this command
+as a target so that you can customize the look of `cmd.exe`. When you edit the properties in `cmd.exe` they will attach
+to the shortcut you used to launch. (Recommend using the Underscore cursor instead of the default Legacy one.)
 
-## 8. Adding a passwordless user account
+## 9. Adding a passwordless user account
 
 Use the following commands to create a passwordless account with sudo privileges:
 
@@ -271,7 +291,7 @@ Also uncomment the line from the `/etc/sudoers` file to enable the `wheel` group
 ...
 <b>%wheel ALL=(ALL) ALL</b></code></pre>
 
-## 9. Setting up `pacman` mirror list refresh on startup
+## 10. Setting up `pacman` mirror list refresh on startup
 
 It is a good idea to occasionally to refresh the mirror list. There is a service packaged with `reflector` that does
 this on system startup. Under normal circumstances you will not restart the virtual machine often since Hyper-V suspends
@@ -284,7 +304,7 @@ $ sudo systemctl enable reflector.service
 
 You can configure the parameters in `/etc/xdg/reflector/reflector.conf`.
 
-## 10. Setting up `zsh` as a replacement for `bash`
+## 11. Setting up `zsh` as a replacement for `bash`
 
 Zsh is a good alternative shell to the default Bash shell. The Arch Linux installation images uses a Zsh configuration
 that you can install straight from `pacman` called [grml zsh](https://grml.org/zsh/).
@@ -297,46 +317,36 @@ _Note: You do not usually require root privileges to change your own shell but b
 [PAM](https://en.wikipedia.org/wiki/Pluggable_authentication_module) is not configured to allow passwordless accounts to
 change shell._
 
-## 11. Setting up `tmux` (terminal multiplexer)
+## 12. Accessing the virtual machine's files from Windows Explorer
 
-### `.zshrc`
-```
-# Start tmux when connecting through SSH
-if [[ $- == *i* ]] && [[ -z "$TMUX" ]] && [[ -n "$SSH_CONNECTION" ]]; then
-        tmux new-session -A -s ssh_tmux ; exit
-fi
-```
-### `.tmux.conf`
-```
-# Remap prefix from 'C-b' to 'C-a'. Less awkward prefix shortcut.
-unbind C-b
-set-option -g prefix C-a
-bind-key C-a last-window
+Windows 10 Pro has support for mounting NFS file servers as network drives. Use the following steps to mount the 
+virtual machine's root: 
 
-# Windows with shift + arrow keys
-bind -n M-Left previous-window
-bind -n M-Right next-window
+Firstly you need to enable NFS support on the Windows side:
+- Open "Programs and Features" in the Control Panel (`appwiz.cpl`). 
+- Select "Turn Windows features on or off" in the sidebar and check "Services for NFS" in the dropdown, then press OK.
+- Reboot the system to complete the installation of NFS features. 
 
-# Window splitting with underscore and backslash
-bind \\ split-window -h
-bind _ split-window -v
+By default you will not be able to edit files when connected with NFS. Configure the `AnonymousUid` and `AnonymousGid` 
+in the registry to enable edit permissions:
 
-# Non-prefix pane switching with Alt + Arrow Keys
-bind -n M-Left select-pane -L
-bind -n M-Right select-pane -R
-bind -n M-Up select-pane -U
-bind -n M-Down select-pane -D
+- Inside `regedit.exe`, navigate to `HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\ClientForNFS\CurrentVersion\Default`
+- Create a new 32-bit DWORD key with name `AnonymousUid` and set the value to `0x000003E8` (default UID for a new user 
+on Arch.)
+- Create a new 32-bit DWORD key with name `AnonymousGid` and set the value to `0x000003E8` (default GID for a new user 
+on Arch.)
+- Restart the NFS services by running the following in an Administrator Command Prompt:
+  - `net stop nfsclnt`, `net stop nfsrdr`
+  - `net start nfsrdr`, `net start nfsclnt`
 
-# Change status bar colors
-set -g status-bg colour235
-set -g status-fg white
+On the virtual machine you'll need to install `nfs-utils` and an entry to `/etc/exports` with your Internal Switch's
+subnet. Make sure the subnet is correct because the NFS server will refuse a connection not coming from it. In the
+example below, we are using subnet `192.168.137.0/24`.
+<pre><code>$ sudo pacman -S nfs-utils
+$ sudo nano /etc/exports
+...
+<b>/       192.168.137.0/24(rw,async,no_root_squash)</b>
+...
+$ sudo systemctl enable --now nfs-server.service</code></pre>
 
-# Detach tmux with 'C-s'
-bind -n C-s detach
-```
-
-## To-do
-- [ ] Add some details to the tmux setup
-- [ ] Add instructions on enabling Hyper-V and OpenSSH as Windows features.
-- [ ] Add some information about using cmd.exe with the new underscore cursor
-- [ ] Using Samba to connect the virtual machine as a network drive in Windows Explorer.
+Finally you can connect the network drive by running `mount \\hv-arch1\\ N:` in the Command Prompt.
