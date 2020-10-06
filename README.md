@@ -1,14 +1,15 @@
 # Installing an Arch Linux virtual machine on Hyper-V
 
 ## 1. Enabling Windows Hyper-V and OpenSSH Client features
+Note that Hyper-V is not available on the Windows 10 Home edition, and requires Windows 10 Pro or equivalent. 
 
-To enable Hyper-V, got through the following steps:
+### Enabling Hyper-V 
 - Open "Programs and Features" in the Control Panel (`appwiz.cpl`). 
 - Select "Turn Windows features on or off" in the sidebar and check "Hyper-V" in the dropdown, then press OK.
 
-To enable the built-in SSH client in Windows 10, use these steps:
-- Open the Windows 10 settings app, and select the "Apps" panel. Under the "Apps & features" tab, press "Optional 
-features."
+### Enabling the built-in SSH client in Windows 10
+- Open the Windows 10 settings app, and select the "Apps" panel. 
+- Under the "Apps & features" tab, press "Optional features."
 - Click on "Add a feature", then check "OpenSSH Client" and press "Install."
 
 In order to finish activating the features you must reboot Windows.
