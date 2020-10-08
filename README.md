@@ -350,4 +350,5 @@ $ sudo nano /etc/exports
 ...
 $ sudo systemctl enable --now nfs-server.service</code></pre>
 
-Finally you can connect the network drive by running `mount \\hv-arch1\home\username N:` in the Command Prompt.
+Finally you can connect the network drive by running `mount \\hv-arch1\home\username N: -o fileaccess=644` in the 
+Command Prompt.
