@@ -320,8 +320,8 @@ change shell._
 
 ## 12. Accessing the virtual machine's files from Windows Explorer
 
-Windows 10 Pro has support for mounting NFS file servers as network drives. Use the following steps to mount the 
-virtual machine's root: 
+Windows 10 Pro has support for mounting NFS file servers as network drives. Use the following steps to mount the home
+directory as a network drive: 
 
 Firstly you need to enable NFS support on the Windows side:
 - Open "Programs and Features" in the Control Panel (`appwiz.cpl`). 
@@ -346,8 +346,8 @@ example below, we are using subnet `192.168.137.0/24`.
 <pre><code>$ sudo pacman -S nfs-utils
 $ sudo nano /etc/exports
 ...
-<b>/       192.168.137.0/24(rw,async,no_root_squash)</b>
+<b>/home/<i>username</i>	192.168.137.0/24(rw,async)</b>
 ...
 $ sudo systemctl enable --now nfs-server.service</code></pre>
 
-Finally you can connect the network drive by running `mount \\hv-arch1\\ N:` in the Command Prompt.
+Finally you can connect the network drive by running `mount \\hv-arch1\home\username N:` in the Command Prompt.
