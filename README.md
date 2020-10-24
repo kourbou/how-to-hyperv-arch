@@ -318,37 +318,6 @@ _Note: You do not usually require root privileges to change your own shell but b
 [PAM](https://en.wikipedia.org/wiki/Pluggable_authentication_module) is not configured to allow passwordless accounts to
 change shell._
 
-## 12. Accessing the virtual machine's files from Windows Explorer
+## 12. Accessing the virtual machine's files
 
-Windows 10 Pro has support for mounting NFS file servers as network drives. Use the following steps to mount the home
-directory as a network drive: 
-
-Firstly you need to enable NFS support on the Windows side:
-- Open "Programs and Features" in the Control Panel (`appwiz.cpl`). 
-- Select "Turn Windows features on or off" in the sidebar and check "Services for NFS" in the dropdown, then press OK.
-- Reboot the system to complete the installation of NFS features. 
-
-By default you will not be able to edit files when connected with NFS. Configure the `AnonymousUid` and `AnonymousGid` 
-in the registry to enable edit permissions:
-
-- Inside `regedit.exe`, navigate to `HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\ClientForNFS\CurrentVersion\Default`
-- Create a new 32-bit DWORD key with name `AnonymousUid` and set the value to `0x000003E8` (default UID for a new user 
-on Arch.)
-- Create a new 32-bit DWORD key with name `AnonymousGid` and set the value to `0x000003E8` (default GID for a new user 
-on Arch.)
-- Restart the NFS services by running the following in an Administrator Command Prompt:
-  - `net stop nfsclnt`, `net stop nfsrdr`
-  - `net start nfsrdr`, `net start nfsclnt`
-
-On the virtual machine you'll need to install `nfs-utils` and an entry to `/etc/exports` with your Internal Switch's
-subnet. Make sure the subnet is correct because the NFS server will refuse a connection not coming from it. In the
-example below, we are using subnet `192.168.137.0/24`.
-<pre><code>$ sudo pacman -S nfs-utils
-$ sudo nano /etc/exports
-...
-<b>/home/<i>username</i>	192.168.137.0/24(rw,async)</b>
-...
-$ sudo systemctl enable --now nfs-server.service</code></pre>
-
-Finally you can connect the network drive by running `mount \\hv-arch1\home\username N: -o fileaccess=644` in the 
-Command Prompt.
+We suggest using WinSCP in "Explorer" mode to easily access the virtual machine's files.
