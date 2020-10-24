@@ -320,4 +320,6 @@ change shell._
 
 ## 12. Accessing the virtual machine's files
 
-We suggest using WinSCP in "Explorer" mode to easily access the virtual machine's files.
+Use WinSCP in "Explorer" mode to easily access the virtual machine's files. It is recommended to change the default 
+permissions when transferring files to `644` for files and `755` for directories. You can do so by going to
+Preferences > Transfer, then selecting "Default" clicking on "Edit..." and enabling "Set permissions". 
