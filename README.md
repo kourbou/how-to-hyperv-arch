@@ -8,6 +8,9 @@ Note that Hyper-V is not available on the Windows 10 Home edition, and requires 
 - Select "Turn Windows features on or off" in the sidebar and check "Hyper-V" in the dropdown, then press OK.
 
 ### Enabling the built-in SSH client in Windows 10
+_Note: In order to download the latest release which contains bugfixes you should use 
+[these instructions](Install-Win32-OpenSSH.md) instead._
+
 - Open the Windows 10 settings app, and select the "Apps" panel. 
 - Under the "Apps & features" tab, press "Optional features."
 - Click on "Add a feature", then check "OpenSSH Client" and press "Install."
