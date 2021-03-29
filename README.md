@@ -19,6 +19,8 @@ In order to finish activating the features you must reboot Windows.
 
 ## 2. Creating the Internal Network Switch
 
+_(See [here](Better-Network-Adapter.md) for newer instructions on setting up Hyper-V networking.)_
+
 If you need the VM to directly connect to your network, use an External Switch instead. An Internal Switch will create a
 subnet inside the host computer that VMs can connect to. You can give these VMs access to the internet by using Windows
 Internet Connection Sharing. 
