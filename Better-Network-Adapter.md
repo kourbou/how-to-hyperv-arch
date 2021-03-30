@@ -82,3 +82,15 @@ DNS=8.8.4.4
 # networkctl reload
 # networkctl status eth0
 ```
+
+- Enable and start `systemd-resolved.service` for DNS lookups.
+
+```console
+# systemctl enable --now systemd-resolved.service
+```
+
+- Map `/etc/resolv.conf` to the stub file provided by `systemd-resolved.service`.
+
+```console
+# ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
+```
