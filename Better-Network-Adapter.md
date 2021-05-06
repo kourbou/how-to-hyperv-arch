@@ -70,10 +70,6 @@ Name=eth*
 [Network]
 Address=172.20.0.2
 Gateway=172.20.0.1
-
-# Google Public DNS
-DNS=8.8.8.8
-DNS=8.8.4.4
 </b></code></pre>
 
 - Reload the network configuration and check status:
@@ -82,6 +78,16 @@ DNS=8.8.4.4
 # networkctl reload
 # networkctl status eth0
 ```
+
+- Configure default nameservers for the system:
+
+<pre><code># nano /etc/etc/systemd/resolved.conf
+...
+<b>[Resolve]
+DNS=8.8.8.8
+DNS=8.8.4.4
+</b>...
+</code></pre>
 
 - Enable and start `systemd-resolved.service` for DNS lookups.
 
