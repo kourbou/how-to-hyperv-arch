@@ -92,12 +92,6 @@ It is easier to interact with the installation image via SSH. To do so, go throu
 # passwd
 ```
 
-- Then start the SSH server.
-
-```
-# systemctl start sshd.service
-```
-
 Now you can connect to the installation image using the `root` account.
 
 ## 6. Install Arch Linux on the virtual machine
