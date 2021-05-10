@@ -322,3 +322,11 @@ change shell._
 Use WinSCP in "Explorer" mode to easily access the virtual machine's files. It is recommended to change the default 
 permissions when transferring files to `644` for files and `755` for directories. You can do so by going to
 Preferences > Transfer, then selecting "Default" clicking on "Edit..." and enabling "Set permissions". 
+
+## 13. Additional steps
+_(These are steps that probably need to be incorporated into the guide, but I haven't found the time)_
+
+- Setting the numbers of processor cores to max in Hyper-V VM settings!
+- Install and enable [Hyper-V extensions](https://wiki.archlinux.org/title/Hyper-V#Post-installation)
+- Recommend setting [swappiness](https://wiki.archlinux.org/title/Swap#Swappiness) to 0
+- Using the [Arch User Repository](https://wiki.archlinux.org/title/Arch_User_Repository) (AUR)
