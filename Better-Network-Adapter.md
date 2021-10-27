@@ -50,6 +50,8 @@
 
 - You can now select the switch when configuring the virtual machine. This allows you to assign a static IP in the
   subnet from the guest O/S. You will also need to specify the gateway IP configured above.
+  
+- Potential required fix for ICS failure: https://support.microsoft.com/help/4055559 ([or here.](https://docs.microsoft.com/en-us/troubleshoot/windows-client/networking/ics-not-work-after-computer-or-service-restart))
 
 ## 2. Connecting an Arch Linux VM to the virtual switch
 
